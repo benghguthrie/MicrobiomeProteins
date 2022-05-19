@@ -21,7 +21,7 @@ library(RCy3)
 # If you are using a Mac, you can open Cytoscape with the following command:
 system2('open', args=c('-a', 'Cytoscape.app'))
 
-# If you are using a PC, try the command above. If it doesn't work, you can open Cytoscape like you would any other program.
+# If you are using a PC, try the command above or you can open Cytoscape like you would any other program.
 ```
 
 Check that you are connected to Cytoscape
