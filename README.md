@@ -11,7 +11,7 @@ Please go to [this](https://cytoscape.org/download.html) site and download Cytos
 
 Please go to [this](https://www.cgl.ucsf.edu/chimerax/download.html) site and download UCSF ChimeraX 1.3. Chimera is used to visualize models of proteins that have been built by fitting amino acids into electron density. Similar to Cytoscape, feel free to get a feel for how to explore a protein by typing "open 1EMA" in the Command Line across the bottom of the application window followed by return or enter.
 
-Open RStudio and run the following commands to ensure you are able to access these libraries
+Open RStudio and run the following commands to ensure you are able to access these libraries and commands:
 ```{r}
 install.packages("BiocManager") # The package manager for Bioconductor
 BiocManager::install("RCy3") # Talking to Cytoscape from R
