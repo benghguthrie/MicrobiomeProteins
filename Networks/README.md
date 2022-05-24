@@ -1,1 +1,1 @@
-# Example Sequence Similarity Netowrks to use in Class
+# Example Sequence Similarity Networks to use in Class
