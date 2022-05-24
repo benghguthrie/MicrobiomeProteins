@@ -1,0 +1,128 @@
+---
+title: "SSN_color_by_order_HNOX"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+#Installation
+```{r}
+#Only need to run this chunk if #Setup doesn't run
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("RCy3")
+install.packages('unikn')
+```
+
+#Setup
+```{r}
+library(RCy3)
+
+# For more information, functions, and examples, see: https://bioconductor.org/packages/devel/bioc/vignettes/RCy3/inst/doc/Overview-of-RCy3.html
+
+library(unikn)
+library(ggplot2)
+library(readxl)
+
+system2('open', args=c('-a', 'Cytoscape.app'))
+```
+
+# Check Cytoscape
+```{r}
+cytoscapePing()
+cytoscapeVersionInfo()
+```
+
+# Open Network
+```{r}
+# Input network path here, or open network manually in Cytoscape
+## NOTE Cytoscape must be open at all times
+## NOTE All actions must be performed on the current open network.
+
+network_dir <- ""
+network_file <- ""
+list.files()
+
+importNetworkFromFile(network_file)
+layoutNetwork()
+```
+
+```{r}
+#Extract order from current Node table
+TyrDC_Order_unique <- unique(getTableColumns(table = 'node', columns = 'Order')[,'Order'])
+```
+
+```{r}
+#I am still manually generating this color list... Needs to be the same length as the length of TyrDC_Order_unique
+color_list <- c("#99ADC0", "#3A2465","#000080", "#922329", "#5B4534", "#FDE8DC", "#404E55", "#0089A3", "#CB7E98", "#A4E804", "#324E72", "#6A3A4C", "#83AB58", "#001C1E", "#D1F7CE", "#004B28", "#C8D0F6", "#A3A489", "#939799", "#222800", "#BF5650", "#E83000", '#5588DD', '#FFFFFF', "#BC23FF", "#000000")
+
+color_list_Order <- color_list[1:length(TyrDC_Order_unique)]
+```
+
+
+```{r}
+#Send the colors to Cytoscape
+## NOTE Still exporting to PNG by hand
+setNodeColorMapping(
+  'Order',
+  table.column.values = TyrDC_Order_unique,
+  colors = color_list_Order,
+  mapping.type = "d",
+  default.color = '#808080'
+)
+```
+
+
+
+```{r}
+# Generate custom legend and save as a PDF
+# From here: from https://bookdown.org/hneth/ds4psy/D-2-apx-colors-essentials.html
+
+custom_legend <- newpal(color_list_Order,names = TyrDC_Order_unique)
+pdf(file='Order_legend.pdf')
+seecol(custom_legend, col_brd = "black", lwd_brd = 2, 
+       title = "Legend")
+```
+
+############
+
+```{r}
+# Figuring out how to extract and manipulate the node table to be able to:
+# 1) Add orders to UniFrac points, and 
+# 2) label by < 1% and > 1% prevalence (or color each point like a heatmap)
+
+node_table <- as.data.frame(getTableColumns(table = 'node'), stringsasfactors=FALSE)
+head(node_table)
+node_table_working <- node_table
+dim(node_table)[1]
+
+getNetworkName()
+
+
+```
+
+
+```{r}
+# Add columns, modify columns, etc to node table here.
+```
+
+
+
+```{r}
+
+loadTableData(
+  node_table_working,
+  data.key.column = "shared name",
+  table = "node",
+  table.key.column = "shared name")
+```
+
